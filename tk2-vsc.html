@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch</title>
+  <style>
+    body { 
+    font-family: 'Segoe UI', sans-serif;
+     text-align: center; padding: 2em; 
+     background: linear-gradient(to right, #ffecd2, #fcb69f);
+     color: #333;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 1em;
+      font-weight: bold;
+    }
+
+    .time {
+       font-size: 3em;
+       margin-bottom: 1em;
+   }
+    button {
+      margin: 0.5em;
+      padding: 0.7em 1.2em;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #171414;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s; 
+    }
+    
+    button:hover {
+      background-color: #555;
+    }
+    ul { 
+      list-style: none;
+      padding: 0;
+      margin-top: 1em;
+    }
+     li {
+      margin: 0.3em 0;
+      padding: 0.5em;
+      background: #fff;
+      border-radius: 5px;
+    }
+
+    .fastest {
+      background-color: #ffe066;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Stopwatch</h1>
+  <div class="time" id="display">00:00:00</div>
+  <button onclick="start()">Start</button>
+  <button onclick="pause()">Pause</button>
+  <button onclick="reset()">Reset</button>
+  <button onclick="lap()">Lap</button>
+  <ul id="laps"></ul>
+
+  <script>
+    let [sec, min, hr] = [0, 0, 0];
+    let display = document.getElementById("display");
+    let interval;
+
+    function update() {
+      sec++;
+      if (sec == 60) { sec = 0; min++; }
+      if (min == 60) { min = 0; hr++; }
+      display.innerText = `${pad(hr)}:${pad(min)}:${pad(sec)}`;
+    }
+
+    function pad(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function start() {
+      if (!interval) interval = setInterval(update, 1000);
+    }
+
+    function pause() {
+      clearInterval(interval);
+      interval = null;
+    }
+
+    function reset() {
+      pause();
+      [sec, min, hr] = [0, 0, 0];
+      display.innerText = "00:00:00";
+      document.getElementById("laps").innerHTML = "";
+    }
+
+    function lap() {
+      const lapTime = display.innerText;
+      const lapItem = document.createElement("li");
+      lapItem.innerText = `Lap: ${lapTime}`;
+      document.getElementById("laps").appendChild(lapItem);
+    }
+  </script>
+</body>
+</html>
